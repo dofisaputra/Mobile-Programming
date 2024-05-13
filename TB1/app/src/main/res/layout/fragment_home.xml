@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.fragment.HomeFragment">
+
+    <LinearLayout
+        android:id="@+id/ll_app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:layout_marginHorizontal="32dp"
+        android:layout_marginTop="24dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/iv_logo"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:contentDescription="@string/image_of_logo"
+            android:src="@drawable/app_logo" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="end|center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_marginHorizontal="4dp"
+                android:contentDescription="@string/image_of_search"
+                android:src="@drawable/ic_search" />
+
+            <ImageView
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_marginHorizontal="4dp"
+                android:contentDescription="@string/image_of_search"
+                android:src="@drawable/ic_bell" />
+
+            <ImageView
+                android:id="@+id/iv_inbox"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_marginHorizontal="4dp"
+                android:contentDescription="@string/image_of_search"
+                android:src="@drawable/ic_inbox" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ll_app_bar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:orientation="vertical"
+            android:paddingHorizontal="24dp"
+            android:paddingTop="24dp"
+            android:paddingBottom="52dp">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/lightBlue"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="0dp"
+                app:contentPadding="22dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.imageview.ShapeableImageView
+                            android:id="@+id/iv_image_profile"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:src="@drawable/img_profile"
+                            app:shapeAppearanceOverlay="@style/Circular" />
+
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="15dp"
+                            android:autofillHints="What's on your head?"
+                            android:background="@null"
+                            android:hint="@string/what_s_on_your_head"
+                            android:inputType="text"
+                            android:textColorHint="@color/gray" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="32dp"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:contentDescription="@string/image_of_add_photo"
+                            android:src="@drawable/ic_add_photo" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="4dp"
+                            android:text="@string/image"
+                            android:textColor="@color/black" />
+
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginHorizontal="10dp"
+                            android:background="@color/black" />
+
+                        <ImageView
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:contentDescription="@string/image_of_add_photo"
+                            android:src="@drawable/ic_attach" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="4dp"
+                            android:text="@string/videos"
+                            android:textColor="@color/black" />
+
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginHorizontal="10dp"
+                            android:background="@color/black" />
+
+                        <ImageView
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:contentDescription="@string/image_of_add_photo"
+                            android:src="@drawable/ic_attach" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="4dp"
+                            android:text="@string/attach"
+                            android:textColor="@color/black" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvStory"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="42dp"
+                android:orientation="horizontal"
+                android:visibility="visible"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:itemCount="5"
+                tools:listitem="@layout/item_story" />
+
+            <ProgressBar
+                android:id="@+id/pbStoryLoading"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="42dp"
+                android:visibility="gone" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvPost"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="42dp"
+                android:layout_weight="1"
+                android:nestedScrollingEnabled="false"
+                android:orientation="vertical"
+                android:visibility="visible"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:itemCount="2"
+                tools:listitem="@layout/item_post" />
+
+            <ProgressBar
+                android:id="@+id/pbPostLoading"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="42dp"
+                android:visibility="gone" />
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

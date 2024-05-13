@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/app_background"
+    tools:context=".view.activity.SignInActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingHorizontal="52dp"
+            android:paddingVertical="82dp">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="32dp"
+                android:contentDescription="@string/image_of_logo"
+                android:src="@drawable/app_logo" />
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tl_sign_in_up"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_marginTop="52dp"
+                android:background="@android:color/transparent"
+                app:tabGravity="start"
+                app:tabSelectedTextColor="@color/black"
+                app:tabTextAppearance="@style/MyTabLayoutTextAppearance">
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sign_in" />
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sign_up" />
+
+            </com.google.android.material.tabs.TabLayout>
+
+            <FrameLayout
+                android:id="@+id/fl_content"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="32dp"
+                android:layout_weight="1"
+                android:animateLayoutChanges="true" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

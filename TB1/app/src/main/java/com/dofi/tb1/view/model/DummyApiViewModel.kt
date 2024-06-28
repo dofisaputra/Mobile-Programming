@@ -136,5 +136,7 @@ enum class FetchType {
     LOGIN_USER,
     POST_BY_USER,
     COMMENTS,
-    COMMENT_BY_POST
+    COMMENT_BY_POST,
+    GET_USER,
+    CREATE_USER
 }

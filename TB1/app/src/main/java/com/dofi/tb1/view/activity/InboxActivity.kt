@@ -30,7 +30,7 @@ class InboxActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         userLogin = getStringPref("userLogin").let { gson.fromJson(it, User::class.java) }
-        viewModel.getCommentByPost("669a438e2841f937d8ee805e", listOf(50, 0))
+        viewModel.getCommentByPost("669a78d32841f96f74eea921", listOf(50, 0))
         setupView()
         onObserverListener()
     }

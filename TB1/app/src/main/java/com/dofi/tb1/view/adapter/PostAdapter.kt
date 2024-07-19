@@ -35,6 +35,10 @@ class PostAdapter : RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
             ivComment.setOnClickListener {
                 onClickListener?.invoke(data, adapterPosition)
             }
+
+            ivLike.setOnClickListener {
+                tvLikeCount.text = (tvLikeCount.text.toString().toInt() + 1).toString()
+            }
         }
     }
 

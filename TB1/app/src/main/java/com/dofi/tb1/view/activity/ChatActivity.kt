@@ -35,7 +35,7 @@ class ChatActivity : AppCompatActivity() {
         userLogin = gson.fromJson(getStringPref("userLogin"), User::class.java)
         owner = gson.fromJson(intent.getStringExtra("owner"), Owner::class.java)
 
-        viewModel.getCommentByPost("669a438e2841f937d8ee805e", listOf(50, 0))
+        viewModel.getCommentByPost("669a78d32841f96f74eea921", listOf(50, 0))
         setupView()
         onViewListener()
         observeViewModel()
@@ -48,7 +48,7 @@ class ChatActivity : AppCompatActivity() {
                 CommentCreate(
                     message = commentText,
                     owner = userLogin?.id,
-                    post = "669a438e2841f937d8ee805e"
+                    post = "669a78d32841f96f74eea921"
                 )
             )
         }
@@ -92,7 +92,7 @@ class ChatActivity : AppCompatActivity() {
             createCommentResponse.observe(this@ChatActivity) {
                 when (it) {
                     is NetworkResultState.Success -> {
-                        viewModel.getCommentByPost("669a438e2841f937d8ee805e", listOf(10, 0))
+                        viewModel.getCommentByPost("669a78d32841f96f74eea921", listOf(10, 0))
                         tieComment.text?.clear()
                     }
 

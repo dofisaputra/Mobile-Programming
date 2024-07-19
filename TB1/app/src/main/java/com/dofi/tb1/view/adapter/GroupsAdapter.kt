@@ -8,6 +8,7 @@ import coil.load
 import com.dofi.tb1.data.model.user.User
 import com.dofi.tb1.data.model.user.getFullNames
 import com.dofi.tb1.databinding.ItemGroupsBinding
+import com.dofi.tb1.extension.changeImageUrl
 
 class GroupsAdapter : RecyclerView.Adapter<GroupsAdapter.GroupsViewHolder>() {
 
@@ -22,7 +23,7 @@ class GroupsAdapter : RecyclerView.Adapter<GroupsAdapter.GroupsViewHolder>() {
             data: User,
             onClickListener: ((User, Int) -> Unit)? = null,
         ) = binding.apply {
-            ivImageGroup.load(data.picture)
+            ivImageGroup.load(data.picture?.changeImageUrl())
             tvGroupName.text = data.getFullNames()
             tvMembers.text = (1000..10000).random().toString() + " Members"
         }

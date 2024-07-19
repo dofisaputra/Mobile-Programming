@@ -9,6 +9,7 @@ import com.dofi.tb1.data.model.comment.Comment
 import com.dofi.tb1.data.model.comment.getPostDate
 import com.dofi.tb1.data.model.getFullNames
 import com.dofi.tb1.databinding.ItemInboxBinding
+import com.dofi.tb1.extension.changeImageUrl
 
 class InboxAdapter : RecyclerView.Adapter<InboxAdapter.InboxViewHolder>() {
 
@@ -23,7 +24,7 @@ class InboxAdapter : RecyclerView.Adapter<InboxAdapter.InboxViewHolder>() {
             data: Comment,
             onClickListener: ((Comment, Int) -> Unit)? = null
         ) = binding.apply {
-            ivProfileImage.load(data.owner?.picture)
+            ivProfileImage.load(data.owner?.picture?.changeImageUrl())
             tvInboxUsername.text = data.owner?.getFullNames()
             tvInboxContent.text = data.message
             tvInboxDate.text = data.getPostDate()

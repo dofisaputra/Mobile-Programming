@@ -7,12 +7,14 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.dofi.tb1.data.model.comment.Comment
 import com.dofi.tb1.databinding.ItemChatBinding
+import com.dofi.tb1.extension.changeImageUrl
 
 class ChatAdapter : RecyclerView.Adapter<ChatAdapter.ChatViewHolder>() {
 
     private lateinit var binding: ItemChatBinding
     private var listItem: ArrayList<Comment> = arrayListOf()
     private var onClickListener: ((Comment, Int) -> Unit)? = null
+    private var userLoginId: String? = null
 
     @SuppressLint("SetTextI18n")
     class ChatViewHolder(private val binding: ItemChatBinding) :
@@ -20,17 +22,18 @@ class ChatAdapter : RecyclerView.Adapter<ChatAdapter.ChatViewHolder>() {
         fun setData(
             data: Comment,
             position: Int,
-            onClickListener: ((Comment, Int) -> Unit)? = null
+            onClickListener: ((Comment, Int) -> Unit)? = null,
+            userLoginId: String
         ) = binding.apply {
-            if (position % 2 == 0) {
+            if (data.owner?.id != userLoginId) {
                 llLeft.visibility = android.view.View.VISIBLE
                 llRight.visibility = android.view.View.GONE
-                ivLeftProfileImage.load(data.owner?.picture)
+                ivLeftProfileImage.load(data.owner?.picture?.changeImageUrl())
                 tvLeftContent.text = data.message
             } else {
                 llLeft.visibility = android.view.View.GONE
                 llRight.visibility = android.view.View.VISIBLE
-                ivRightProfileImage.load(data.owner?.picture)
+                ivRightProfileImage.load(data.owner.picture?.changeImageUrl())
                 tvRightContent.text = data.message
             }
         }
@@ -46,7 +49,7 @@ class ChatAdapter : RecyclerView.Adapter<ChatAdapter.ChatViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: ChatViewHolder, position: Int) {
-        holder.setData(listItem[position], position, onClickListener)
+        holder.setData(listItem[position], position, onClickListener, userLoginId.orEmpty())
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -55,6 +58,10 @@ class ChatAdapter : RecyclerView.Adapter<ChatAdapter.ChatViewHolder>() {
         this.listItem.addAll(listItem)
         this.onClickListener = onClickListener
         notifyDataSetChanged()
+    }
+
+    fun setUserLoginId(userLoginId: String) {
+        this.userLoginId = userLoginId
     }
 
 }

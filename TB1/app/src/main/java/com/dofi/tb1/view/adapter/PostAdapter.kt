@@ -9,6 +9,7 @@ import com.dofi.tb1.data.model.post.Post
 import com.dofi.tb1.data.model.getFullNames
 import com.dofi.tb1.data.model.post.getPostDate
 import com.dofi.tb1.databinding.ItemPostBinding
+import com.dofi.tb1.extension.changeImageUrl
 
 class PostAdapter : RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
 
@@ -23,11 +24,11 @@ class PostAdapter : RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
             data: Post,
             onClickListener: ((Post, Int) -> Unit)? = null
         ) = binding.apply {
-            ivImageProfile.load(data.owner?.picture)
+            ivImageProfile.load(data.owner?.picture?.changeImageUrl())
             tvUsername.text = data.owner?.getFullNames()
             tvDate.text = data.getPostDate()
             tvPostContent.text = data.text
-            ivImagePost.load(data.image)
+            ivImagePost.load(data.image?.changeImageUrl())
             tvLikeCount.text = data.likes.toString()
             tvCommentCount.text = ""
 
@@ -53,7 +54,7 @@ class PostAdapter : RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
     @SuppressLint("NotifyDataSetChanged")
     fun setData(listItem: List<Post>, onClickListener: ((Post, Int) -> Unit)? = null) {
         this.listItem.clear()
-        this.listItem.addAll(listItem)
+        this.listItem.addAll(listItem.filter { it.text != "||+for_inbox_purpose+||" })
         this.onClickListener = onClickListener
         notifyDataSetChanged()
     }

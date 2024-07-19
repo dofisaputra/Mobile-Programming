@@ -8,6 +8,7 @@ import coil.load
 import com.dofi.tb1.data.model.user.User
 import com.dofi.tb1.data.model.user.getFullNames
 import com.dofi.tb1.databinding.ItemFollowBinding
+import com.dofi.tb1.extension.changeImageUrl
 
 class FollowAdapter : RecyclerView.Adapter<FollowAdapter.FollowViewHolder>() {
 
@@ -22,7 +23,7 @@ class FollowAdapter : RecyclerView.Adapter<FollowAdapter.FollowViewHolder>() {
             data: User,
             onClickListener: ((User, Int) -> Unit)? = null,
         ) = binding.apply {
-            ivImageProfile.load(data.picture)
+            ivImageProfile.load(data.picture?.changeImageUrl())
             tvUsername.text = data.getFullNames()
             tvFollowers.text = (1000..10000).random().toString() + " followers"
         }

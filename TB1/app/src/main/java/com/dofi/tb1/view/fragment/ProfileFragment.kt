@@ -16,6 +16,7 @@ import com.dofi.tb1.data.model.NetworkResultState
 import com.dofi.tb1.data.model.user.User
 import com.dofi.tb1.data.model.user.getFullNames
 import com.dofi.tb1.databinding.FragmentProfileBinding
+import com.dofi.tb1.extension.changeImageUrl
 import com.dofi.tb1.extension.getStringPref
 import com.dofi.tb1.extension.putStringPref
 import com.dofi.tb1.view.activity.SignInActivity
@@ -84,8 +85,8 @@ class ProfileFragment : Fragment() {
 
         userLogin?.let {
             binding.apply {
-                ivProfileBackground.load(it.picture)
-                ivProfileImage.load(it.picture)
+                ivProfileBackground.load(it.picture?.changeImageUrl())
+                ivProfileImage.load(it.picture?.changeImageUrl())
                 tvUsername.text = it.getFullNames()
                 tvAccount.text = it.email
                 tvJob.text = it.location?.street

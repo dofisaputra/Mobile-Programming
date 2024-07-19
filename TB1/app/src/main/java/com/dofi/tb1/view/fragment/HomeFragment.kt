@@ -27,6 +27,7 @@ import com.dofi.tb1.data.model.post.Post
 import com.dofi.tb1.data.model.post.PostCreate
 import com.dofi.tb1.data.model.user.User
 import com.dofi.tb1.databinding.FragmentHomeBinding
+import com.dofi.tb1.extension.changeImageUrl
 import com.dofi.tb1.extension.getStringPref
 import com.dofi.tb1.view.activity.InboxActivity
 import com.dofi.tb1.view.adapter.PostAdapter
@@ -107,7 +108,7 @@ class HomeFragment : Fragment() {
             }
 
         binding.apply {
-            ivImageProfile.load(userLogin?.picture)
+            ivImageProfile.load(userLogin?.picture?.changeImageUrl())
         }
         viewModel.getListOfUsers(listOf(50, 0))
         viewModel.getListOfPosts(listOf(50, 0))

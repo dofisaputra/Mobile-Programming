@@ -4,9 +4,14 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
+import com.dofi.tb1.data.model.NetworkResultState
 import com.dofi.tb1.data.model.Owner
+import com.dofi.tb1.data.model.comment.CommentCreate
 import com.dofi.tb1.data.model.getFullNames
+import com.dofi.tb1.data.model.user.User
 import com.dofi.tb1.databinding.ActivityChatBinding
+import com.dofi.tb1.extension.changeImageUrl
+import com.dofi.tb1.extension.getStringPref
 import com.dofi.tb1.view.adapter.ChatAdapter
 import com.dofi.tb1.view.model.DummyApiViewModel
 import com.google.gson.Gson
@@ -19,16 +24,34 @@ class ChatActivity : AppCompatActivity() {
     private val viewModel by viewModel<DummyApiViewModel>()
     private val chatAdapter by lazy { ChatAdapter() }
     private val gson by inject<Gson>()
-    private var owner : Owner? = null
+    private var owner: Owner? = null
+    private var userLogin: User? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityChatBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        userLogin = gson.fromJson(getStringPref("userLogin"), User::class.java)
+        owner = gson.fromJson(intent.getStringExtra("owner"), Owner::class.java)
+
         viewModel.getCommentByPost("669a438e2841f937d8ee805e", listOf(50, 0))
         setupView()
+        onViewListener()
         observeViewModel()
+    }
+
+    private fun onViewListener() = with(binding) {
+        btnSendChat.setOnClickListener {
+            val commentText = tieComment.text.toString()
+            viewModel.createComment(
+                CommentCreate(
+                    message = commentText,
+                    owner = userLogin?.id,
+                    post = "669a438e2841f937d8ee805e"
+                )
+            )
+        }
     }
 
     private fun setupView() = with(binding) {
@@ -41,25 +64,42 @@ class ChatActivity : AppCompatActivity() {
             onBackPressedDispatcher.onBackPressed()
         }
 
-        owner = gson.fromJson(intent.getStringExtra("owner"), Owner::class.java)
-        ivProfileImage.load(owner?.picture)
+        ivProfileImage.load(owner?.picture?.changeImageUrl())
         tvUsername.text = owner?.getFullNames()
     }
 
     private fun observeViewModel() = with(binding) {
-//        viewModel.apply {
-//            loadingState.observe(this@ChatActivity) { state ->
-//                state[FetchType.COMMENTS]?.let {
-//                    pbChat.visibility = if (it) View.VISIBLE else View.GONE
-//                }
-//            }
-//
-//            comments.observe(this@ChatActivity) { response ->
-//                response.data?.let { comment ->
-//                    chatAdapter.setData(comment)
-//                }
-//            }
-//        }
+        viewModel.apply {
+            getCommentByPostResponse.observe(this@ChatActivity) { response ->
+                when (response) {
+                    is NetworkResultState.Loading -> {
+                        println("Loading")
+                    }
+
+                    is NetworkResultState.Success -> {
+                        response.data?.data?.let { comments ->
+                            chatAdapter.setUserLoginId(userLogin?.id.orEmpty())
+                            chatAdapter.setData(comments.reversed())
+                        }
+                    }
+
+                    is NetworkResultState.Error -> {
+                        println("Error")
+                    }
+                }
+            }
+
+            createCommentResponse.observe(this@ChatActivity) {
+                when (it) {
+                    is NetworkResultState.Success -> {
+                        viewModel.getCommentByPost("669a438e2841f937d8ee805e", listOf(10, 0))
+                        tieComment.text?.clear()
+                    }
+
+                    else -> {}
+                }
+            }
+        }
     }
 
 }

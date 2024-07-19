@@ -16,3 +16,7 @@ fun Context.putStringPref(key: String, value: String) {
 
 fun Context.getStringPref(key: String): String =
     getPreferences().getString(key, "").orEmpty()
+
+fun String.changeImageUrl(): String {
+    return this.replace("https://i.ibb.co", "https://i.ibb.co.com")
+}

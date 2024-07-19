@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.dofi.tb1.data.model.user.User
 import com.dofi.tb1.databinding.ItemLikePersonBinding
+import com.dofi.tb1.extension.changeImageUrl
 
 class LikeAdapter : RecyclerView.Adapter<LikeAdapter.LikeViewHolder>() {
 
@@ -20,7 +21,7 @@ class LikeAdapter : RecyclerView.Adapter<LikeAdapter.LikeViewHolder>() {
             data: User,
             onClickListener: ((User, Int) -> Unit)? = null
         ) = binding.apply {
-            ivProfileImage.load(data.picture)
+            ivProfileImage.load(data.picture?.changeImageUrl())
         }
     }
 

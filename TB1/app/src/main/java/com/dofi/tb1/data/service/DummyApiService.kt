@@ -1,7 +1,9 @@
 package com.dofi.tb1.data.service
 
 import com.dofi.tb1.data.model.comment.Comment
+import com.dofi.tb1.data.model.comment.CommentCreate
 import com.dofi.tb1.data.model.post.Post
+import com.dofi.tb1.data.model.post.PostCreate
 import com.dofi.tb1.data.model.user.User
 import com.dofi.tb1.data.response.BaseResponse
 import retrofit2.Response
@@ -71,7 +73,7 @@ interface DummyApiService {
 
     @POST("post/create")
     suspend fun createPost(
-        @Body body: Post
+        @Body body: PostCreate
     ): Response<Post>
 
     @PUT("post/{id}")
@@ -108,7 +110,7 @@ interface DummyApiService {
 
     @POST("comment/create")
     suspend fun createComment(
-        @Body body: Comment
+        @Body body: CommentCreate
     ): Response<Comment>
 
     @DELETE("comment/{id}")

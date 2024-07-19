@@ -7,14 +7,21 @@ import androidx.lifecycle.liveData
 import androidx.lifecycle.switchMap
 import com.dofi.tb1.data.model.NetworkResultState
 import com.dofi.tb1.data.model.comment.Comment
+import com.dofi.tb1.data.model.comment.CommentCreate
 import com.dofi.tb1.data.model.post.Post
+import com.dofi.tb1.data.model.post.PostCreate
 import com.dofi.tb1.data.model.user.User
 import com.dofi.tb1.data.repository.DummyApiRepository
+import com.dofi.tb1.data.repository.ImageApiRepository
 import com.dofi.tb1.data.response.BaseResponse
+import com.dofi.tb1.data.response.image.BaseResponseImageUpload
 import com.google.gson.Gson
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 
 class DummyApiViewModel(
-    private val repository: DummyApiRepository
+    private val dummyApiRepository: DummyApiRepository,
+    private val imageApiRepository: ImageApiRepository
 ) : ViewModel() {
 
     private val _listOfUsers = MutableLiveData<List<Int>>()
@@ -25,7 +32,7 @@ class DummyApiViewModel(
     val listOfUsers : LiveData<NetworkResultState<BaseResponse<User>?>> = _listOfUsers.switchMap {
         liveData {
             emit(NetworkResultState.Loading)
-            repository.getListOfUsers(it[0], it[1]).collect {
+            dummyApiRepository.getListOfUsers(it[0], it[1]).collect {
                 if (it.isSuccessful) {
                     emit(NetworkResultState.Success(it.body()))
                 } else {
@@ -43,7 +50,7 @@ class DummyApiViewModel(
     val getUserByIdResponse: LiveData<NetworkResultState<User?>> = _getUserById.switchMap {
         liveData {
             emit(NetworkResultState.Loading)
-            repository.getUserById(it).collect {
+            dummyApiRepository.getUserById(it).collect {
                 if (it.isSuccessful) {
                     emit(NetworkResultState.Success(it.body()))
                 } else {
@@ -61,7 +68,25 @@ class DummyApiViewModel(
     val createUserResponse: LiveData<NetworkResultState<User?>> = _createUser.switchMap {
         liveData {
             emit(NetworkResultState.Loading)
-            repository.createUser(it).collect {
+            dummyApiRepository.createUser(it).collect {
+                if (it.isSuccessful) {
+                    emit(NetworkResultState.Success(it.body()))
+                } else {
+                    println("it: $it")
+                }
+            }
+        }
+    }
+
+    private val _updateUser = MutableLiveData<User>()
+    fun updateUser(user: User) {
+        _updateUser.postValue(user)
+    }
+
+    val updateUserResponse: LiveData<NetworkResultState<User?>> = _updateUser.switchMap {
+        liveData {
+            emit(NetworkResultState.Loading)
+            dummyApiRepository.updateUser(it).collect {
                 if (it.isSuccessful) {
                     emit(NetworkResultState.Success(it.body()))
                 } else {
@@ -79,7 +104,7 @@ class DummyApiViewModel(
     val listOfPosts: LiveData<NetworkResultState<BaseResponse<Post>?>> = _getListOfPosts.switchMap {
         liveData {
             emit(NetworkResultState.Loading)
-            repository.getListOfPosts(it[0], it[1]).collect {
+            dummyApiRepository.getListOfPosts(it[0], it[1]).collect {
                 if (it.isSuccessful) {
                     emit(NetworkResultState.Success(it.body()))
                 } else {
@@ -97,7 +122,7 @@ class DummyApiViewModel(
     val getPostByIdResponse: LiveData<NetworkResultState<Post?>> = _getPostById.switchMap {
         liveData {
             emit(NetworkResultState.Loading)
-            repository.getPostById(it).collect {
+            dummyApiRepository.getPostById(it).collect {
                 if (it.isSuccessful) {
                     emit(NetworkResultState.Success(it.body()))
                 } else {
@@ -115,7 +140,7 @@ class DummyApiViewModel(
     val getPostByUserResponse: LiveData<NetworkResultState<BaseResponse<Post>?>> = _getPostByUser.switchMap {
         liveData {
             emit(NetworkResultState.Loading)
-            repository.getPostByUser(it.first, it.second, it.third).collect {
+            dummyApiRepository.getPostByUser(it.first, it.second, it.third).collect {
                 if (it.isSuccessful) {
                     emit(NetworkResultState.Success(it.body()))
                 } else {
@@ -125,15 +150,15 @@ class DummyApiViewModel(
         }
     }
 
-    private val _createPost = MutableLiveData<Post>()
-    fun createPost(post: Post) {
+    private val _createPost = MutableLiveData<PostCreate>()
+    fun createPost(post: PostCreate) {
         _createPost.postValue(post)
     }
 
     val createPostResponse: LiveData<NetworkResultState<Post?>> = _createPost.switchMap {
         liveData {
             emit(NetworkResultState.Loading)
-            repository.createPost(it).collect {
+            dummyApiRepository.createPost(it).collect {
                 if (it.isSuccessful) {
                     emit(NetworkResultState.Success(it.body()))
                 } else {
@@ -151,7 +176,7 @@ class DummyApiViewModel(
     val getListOfCommentsResponse: LiveData<NetworkResultState<BaseResponse<Comment>?>> = _getListOfComments.switchMap {
         liveData {
             emit(NetworkResultState.Loading)
-            repository.getListOfComments(it[0], it[1]).collect {
+            dummyApiRepository.getListOfComments(it[0], it[1]).collect {
                 if (it.isSuccessful) {
                     emit(NetworkResultState.Success(it.body()))
                 } else {
@@ -169,7 +194,7 @@ class DummyApiViewModel(
     val getCommentByPostResponse: LiveData<NetworkResultState<BaseResponse<Comment>?>> = _getCommentByPost.switchMap {
         liveData {
             emit(NetworkResultState.Loading)
-            repository.getCommentByPost(it.first, it.second[0], it.second[1]).collect {
+            dummyApiRepository.getCommentByPost(it.first, it.second[0], it.second[1]).collect {
                 if (it.isSuccessful) {
                     emit(NetworkResultState.Success(it.body()))
                 } else {
@@ -179,15 +204,51 @@ class DummyApiViewModel(
         }
     }
 
-    private val _createComment = MutableLiveData<Comment>()
-    fun createComment(comment: Comment) {
+    private val _createComment = MutableLiveData<CommentCreate>()
+    fun createComment(comment: CommentCreate) {
         _createComment.postValue(comment)
     }
 
     val createCommentResponse: LiveData<NetworkResultState<Comment?>> = _createComment.switchMap {
         liveData {
             emit(NetworkResultState.Loading)
-            repository.createComment(it).collect {
+            dummyApiRepository.createComment(it).collect {
+                if (it.isSuccessful) {
+                    emit(NetworkResultState.Success(it.body()))
+                } else {
+                    println("it: $it")
+                }
+            }
+        }
+    }
+
+    private val _uploadImage = MutableLiveData<MultipartBody.Part>()
+    fun uploadImage(image: MultipartBody.Part) {
+        _uploadImage.postValue(image)
+    }
+
+    val uploadImageResponse: LiveData<NetworkResultState<BaseResponseImageUpload?>> = _uploadImage.switchMap {
+        liveData {
+            emit(NetworkResultState.Loading)
+            imageApiRepository.uploadImage(it).collect {
+                if (it.isSuccessful) {
+                    emit(NetworkResultState.Success(it.body()))
+                } else {
+                    println("it: $it")
+                }
+            }
+        }
+    }
+
+    private val _uploadImageUser = MutableLiveData<MultipartBody.Part>()
+    fun uploadImageUser(image: MultipartBody.Part) {
+        _uploadImageUser.postValue(image)
+    }
+
+    val uploadImageUserResponse: LiveData<NetworkResultState<BaseResponseImageUpload?>> = _uploadImageUser.switchMap {
+        liveData {
+            emit(NetworkResultState.Loading)
+            imageApiRepository.uploadImage(it).collect {
                 if (it.isSuccessful) {
                     emit(NetworkResultState.Success(it.body()))
                 } else {

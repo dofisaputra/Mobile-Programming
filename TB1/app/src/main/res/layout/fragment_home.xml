@@ -84,7 +84,10 @@
                 app:cardBackgroundColor="@color/lightBlue"
                 app:cardCornerRadius="8dp"
                 app:cardElevation="0dp"
-                app:contentPadding="22dp">
+                app:contentPaddingBottom="14dp"
+                app:contentPaddingLeft="22dp"
+                app:contentPaddingRight="22dp"
+                app:contentPaddingTop="22dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -104,16 +107,33 @@
                             android:src="@drawable/img_profile"
                             app:shapeAppearanceOverlay="@style/Circular" />
 
-                        <EditText
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="15dp"
-                            android:autofillHints="What's on your head?"
-                            android:background="@null"
-                            android:hint="@string/what_s_on_your_head"
-                            android:inputType="text"
-                            android:textColor="@color/black"
-                            android:textColorHint="@color/gray" />
+                            android:orientation="vertical">
+
+                            <com.google.android.material.imageview.ShapeableImageView
+                                android:id="@+id/ivUploadImage"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="8dp"
+                                android:adjustViewBounds="true"
+                                android:scaleType="fitXY"
+                                app:shapeAppearanceOverlay="@style/RoundedSquare" />
+
+                            <EditText
+                                android:id="@+id/etCaption"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:autofillHints="What's on your head?"
+                                android:background="@null"
+                                android:hint="@string/what_s_on_your_head"
+                                android:inputType="text"
+                                android:textColor="@color/black"
+                                android:textColorHint="@color/gray" />
+
+                        </LinearLayout>
 
                     </LinearLayout>
 
@@ -183,6 +203,20 @@
                             android:textColor="@color/black" />
 
                     </LinearLayout>
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btnPost"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="22dp"
+                        android:background="@drawable/bg_button"
+                        android:minHeight="0dp"
+                        android:paddingVertical="8dp"
+                        android:text="Post"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:textSize="16sp" />
 
                 </LinearLayout>
 

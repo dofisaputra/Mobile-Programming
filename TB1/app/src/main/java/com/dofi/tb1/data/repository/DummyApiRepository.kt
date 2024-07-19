@@ -1,7 +1,9 @@
 package com.dofi.tb1.data.repository
 
 import com.dofi.tb1.data.model.comment.Comment
+import com.dofi.tb1.data.model.comment.CommentCreate
 import com.dofi.tb1.data.model.post.Post
+import com.dofi.tb1.data.model.post.PostCreate
 import com.dofi.tb1.data.model.user.User
 import com.dofi.tb1.data.response.BaseResponse
 import com.dofi.tb1.data.service.DummyApiService
@@ -34,9 +36,9 @@ class DummyApiRepository(
         }
     }
 
-    suspend fun updateUser(id: String, body: User): Flow<Response<User>> {
+    suspend fun updateUser(body: User): Flow<Response<User>> {
         return flow {
-            val response = dummyApiService.updateUser(id, body)
+            val response = dummyApiService.updateUser(body.id.orEmpty(), body)
             emit(response)
         }
     }
@@ -84,7 +86,7 @@ class DummyApiRepository(
         }
     }
 
-    suspend fun createPost(body: Post): Flow<Response<Post>> {
+    suspend fun createPost(body: PostCreate): Flow<Response<Post>> {
         return flow {
             val response = dummyApiService.createPost(body)
             emit(response)
@@ -137,7 +139,7 @@ class DummyApiRepository(
         }
     }
 
-    suspend fun createComment(body: Comment): Flow<Response<Comment>> {
+    suspend fun createComment(body: CommentCreate): Flow<Response<Comment>> {
         return flow {
             val response = dummyApiService.createComment(body)
             emit(response)

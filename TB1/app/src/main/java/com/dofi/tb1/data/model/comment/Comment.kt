@@ -1,16 +1,17 @@
-package com.dofi.tb1.data.model
+package com.dofi.tb1.data.model.comment
 
 
+import com.dofi.tb1.data.model.Owner
 import com.google.gson.annotations.SerializedName
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 data class Comment(
-    @SerializedName("id") val id: String?,
-    @SerializedName("message") val message: String?,
-    @SerializedName("owner") val owner: Owner?,
-    @SerializedName("post") val post: String?,
-    @SerializedName("publishDate") val publishDate: String?
+    @SerializedName("id") val id: String? = null,
+    @SerializedName("message") val message: String? = null,
+    @SerializedName("owner") val owner: Owner? = null,
+    @SerializedName("post") val post: String? = null,
+    @SerializedName("publishDate") val publishDate: String? = null
 )
 
 fun Comment.getPostDate(): String? {

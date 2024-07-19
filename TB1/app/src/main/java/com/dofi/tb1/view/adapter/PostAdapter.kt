@@ -5,9 +5,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import com.dofi.tb1.data.model.Post
+import com.dofi.tb1.data.model.post.Post
 import com.dofi.tb1.data.model.getFullNames
-import com.dofi.tb1.data.model.getPostDate
+import com.dofi.tb1.data.model.post.getPostDate
 import com.dofi.tb1.databinding.ItemPostBinding
 
 class PostAdapter : RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
@@ -29,7 +29,7 @@ class PostAdapter : RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
             tvPostContent.text = data.text
             ivImagePost.load(data.image)
             tvLikeCount.text = data.likes.toString()
-            tvCommentCount.text = (0..100).random().toString()
+            tvCommentCount.text = ""
 
             ivComment.setOnClickListener {
                 onClickListener?.invoke(data, adapterPosition)

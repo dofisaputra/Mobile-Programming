@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">TB1</string>
     <string name="login">Login</string>
-    <string name="email_phone">Email/Phone</string>
+    <string name="email_phone">Email</string>
     <string name="password">Password</string>
     <string name="forgot_password">Forgot Password?</string>
     <string name="image_of_logo">Image of logo</string>

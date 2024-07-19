@@ -6,10 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.dofi.tb1.data.model.NetworkResultState
 import com.dofi.tb1.databinding.FragmentGroupsBinding
 import com.dofi.tb1.view.adapter.GroupsAdapter
 import com.dofi.tb1.view.model.DummyApiViewModel
-import com.dofi.tb1.view.model.FetchType
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class GroupsFragment : Fragment() {
@@ -28,7 +28,7 @@ class GroupsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.fetchUsers()
+        viewModel.getListOfUsers(listOf(50, 0))
 
         onViewListener()
         onObserverListener()
@@ -43,15 +43,16 @@ class GroupsFragment : Fragment() {
 
     private fun onObserverListener() = with(binding) {
         viewModel.apply {
-            loadingState.observe(viewLifecycleOwner) { state ->
-                state[FetchType.USERS]?.let {
-                    pbGroupLoading.visibility = if (it) View.VISIBLE else View.GONE
-                }
-            }
-
-            users.observe(viewLifecycleOwner) { response ->
-                response.data?.let { user ->
-                    groupsAdapter.setData(user)
+            listOfUsers.observe(viewLifecycleOwner) {
+                when (it) {
+                    is NetworkResultState.Loading -> {
+                        pbGroupLoading.visibility = View.VISIBLE
+                    }
+                    is NetworkResultState.Success -> {
+                        pbGroupLoading.visibility = View.GONE
+                        groupsAdapter.setData(it.data?.data ?: emptyList())
+                    }
+                    else -> {}
                 }
             }
         }

@@ -5,9 +5,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import com.dofi.tb1.data.model.Comment
+import com.dofi.tb1.data.model.comment.Comment
+import com.dofi.tb1.data.model.comment.getPostDate
 import com.dofi.tb1.data.model.getFullNames
-import com.dofi.tb1.data.model.getPostDate
 import com.dofi.tb1.databinding.ItemCommentBinding
 
 class CommentAdapter : RecyclerView.Adapter<CommentAdapter.CommentViewHolder>() {

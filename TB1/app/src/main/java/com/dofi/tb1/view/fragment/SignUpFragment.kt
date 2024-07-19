@@ -6,15 +6,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import com.dofi.tb1.data.model.UserLogin
+import com.dofi.tb1.data.model.NetworkResultState
+import com.dofi.tb1.data.model.user.User
 import com.dofi.tb1.databinding.FragmentSignUpBinding
-import com.dofi.tb1.view.model.UserApiViewModel
+import com.dofi.tb1.view.model.DummyApiViewModel
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
 class SignUpFragment : Fragment() {
 
     private lateinit var binding: FragmentSignUpBinding
-    private val viewModel by activityViewModel<UserApiViewModel>()
+    private val viewModel by activityViewModel<DummyApiViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,11 +42,10 @@ class SignUpFragment : Fragment() {
                 Toast.makeText(requireContext(), "Please fill all the fields", Toast.LENGTH_SHORT)
                     .show()
             } else {
-                val userData = UserLogin(
-                    id = tieEmailPhone.text.toString(),
-                    fullName = tieFullName.text.toString(),
-                    emailOrPhone = tieEmailPhone.text.toString(),
-                    password = tiePassword.text.toString()
+                val userData = User(
+                    firstName = "${fullName}_||_${email}",
+                    lastName = password,
+                    email = email,
                 )
 
                 viewModel.createUser(userData)
@@ -56,8 +56,13 @@ class SignUpFragment : Fragment() {
     private fun onObserverListener() = with(binding) {
         viewModel.apply {
             createUserResponse.observe(viewLifecycleOwner) {
-                Toast.makeText(requireContext(), "User created, please Sign in", Toast.LENGTH_SHORT)
-                    .show()
+                when (it) {
+                    is NetworkResultState.Success -> {
+                        Toast.makeText(requireContext(), "User created, please Sign in", Toast.LENGTH_SHORT).show()
+                    }
+
+                    else -> {}
+                }
             }
         }
     }

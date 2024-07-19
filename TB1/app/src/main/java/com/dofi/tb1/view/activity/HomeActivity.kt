@@ -1,28 +1,25 @@
 package com.dofi.tb1.view.activity
 
+import android.content.Intent
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
-import androidx.fragment.app.add
 import com.dofi.tb1.R
 import com.dofi.tb1.databinding.ActivityHomeBinding
+import com.dofi.tb1.extension.getStringPref
+import com.dofi.tb1.extension.putStringPref
 import com.dofi.tb1.view.fragment.DiscoverPeopleFragment
 import com.dofi.tb1.view.fragment.GroupsFragment
 import com.dofi.tb1.view.fragment.HomeFragment
 import com.dofi.tb1.view.fragment.ProfileFragment
 import com.dofi.tb1.view.model.DummyApiViewModel
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class HomeActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityHomeBinding
     private val viewModel by viewModel<DummyApiViewModel>()
+    private val userLogin by lazy { getStringPref("userLogin") }
 
     private val homeFragment by lazy {
         supportFragmentManager
@@ -78,6 +75,12 @@ class HomeActivity : AppCompatActivity() {
         }
 
         setupView()
+
+        if (userLogin.isEmpty() || userLogin == "") {
+            val intent = Intent(this@HomeActivity, SignInActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

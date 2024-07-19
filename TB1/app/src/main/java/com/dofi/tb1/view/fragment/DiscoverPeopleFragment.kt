@@ -6,11 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.dofi.tb1.R
+import com.dofi.tb1.data.model.NetworkResultState
 import com.dofi.tb1.databinding.FragmentDiscoverPeopleBinding
 import com.dofi.tb1.view.adapter.FollowAdapter
 import com.dofi.tb1.view.model.DummyApiViewModel
-import com.dofi.tb1.view.model.FetchType
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
 class DiscoverPeopleFragment : Fragment() {
@@ -29,7 +28,7 @@ class DiscoverPeopleFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.fetchUsers()
+        viewModel.getListOfUsers(listOf(50, 0))
 
         onViewListener()
         onObserverListener()
@@ -44,15 +43,16 @@ class DiscoverPeopleFragment : Fragment() {
 
     private fun onObserverListener() = with(binding) {
         viewModel.apply {
-            loadingState.observe(viewLifecycleOwner) { state ->
-                state[FetchType.USERS]?.let {
-                    pbUserLoading.visibility = if (it) View.VISIBLE else View.GONE
-                }
-            }
-
-            users.observe(viewLifecycleOwner) { response ->
-                response.data?.let { user ->
-                    followAdapter.setData(user)
+            listOfUsers.observe(viewLifecycleOwner) {
+                when (it) {
+                    is NetworkResultState.Loading -> {
+                        pbUserLoading.visibility = View.VISIBLE
+                    }
+                    is NetworkResultState.Success -> {
+                        pbUserLoading.visibility = View.GONE
+                        followAdapter.setData(it.data?.data ?: emptyList())
+                    }
+                    else -> {}
                 }
             }
         }

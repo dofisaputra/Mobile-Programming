@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import com.dofi.tb1.data.model.User
+import com.dofi.tb1.data.model.user.User
 import com.dofi.tb1.databinding.ItemLikePersonBinding
 
 class LikeAdapter : RecyclerView.Adapter<LikeAdapter.LikeViewHolder>() {

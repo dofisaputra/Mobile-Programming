@@ -6,10 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import coil.load
-import com.dofi.tb1.data.model.getFullNames
+import com.dofi.tb1.data.model.user.User
+import com.dofi.tb1.data.model.user.getFullNames
 import com.dofi.tb1.databinding.FragmentProfileBinding
+import com.dofi.tb1.extension.getStringPref
 import com.dofi.tb1.view.model.DummyApiViewModel
 import com.google.android.material.tabs.TabLayout
+import com.google.gson.Gson
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
 class ProfileFragment : Fragment() {
@@ -18,6 +22,8 @@ class ProfileFragment : Fragment() {
     private val viewModel by activityViewModel<DummyApiViewModel>()
     private val postFragment by lazy { PostFragment() }
     private val detailsFragment by lazy { DetailsFragment() }
+    private val gson by inject<Gson>()
+    private var userLogin: User? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,11 +35,23 @@ class ProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.fetchLoginUser()
-        viewModel.fetchPostByUser()
+        userLogin = context?.getStringPref("userLogin")?.let { gson.fromJson(it, User::class.java) }
+        userLogin?.let {
+            binding.apply {
+                ivProfileBackground.load(it.picture)
+                ivProfileImage.load(it.picture)
+                tvUsername.text = it.getFullNames()
+                tvAccount.text = it.email
+                tvJob.text = it.location?.street
+                tvPost.text = (0..100).random().toString()
+                tvPhotos.text = (0..100).random().toString()
+                tvFollowers.text = (0..100).random().toString()
+                tvFollowing.text = (0..100).random().toString()
+            }
+        }
 
+        viewModel.getPostByUser(userLogin?.id.orEmpty(), 50, 0)
         onViewListener()
-        onObserverListener()
     }
 
     private fun onViewListener() = with(binding) {
@@ -49,24 +67,6 @@ class ProfileFragment : Fragment() {
             override fun onTabUnselected(tab: TabLayout.Tab?) {}
             override fun onTabReselected(tab: TabLayout.Tab?) {}
         })
-    }
-
-    private fun onObserverListener() = with(binding) {
-        viewModel.apply {
-            loginUser.observe(viewLifecycleOwner) { response ->
-                response?.let {
-                    ivProfileBackground.load(it.picture)
-                    ivProfileImage.load(it.picture)
-                    tvUsername.text = it.getFullNames()
-                    tvAccount.text = it.email
-                    tvJob.text = it.location?.street
-                    tvPost.text = (0..100).random().toString()
-                    tvPhotos.text = (0..100).random().toString()
-                    tvFollowers.text = (0..100).random().toString()
-                    tvFollowing.text = (0..100).random().toString()
-                }
-            }
-        }
     }
 
     private fun commitFragment(fragment: Fragment) = with(binding) {

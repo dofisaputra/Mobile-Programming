@@ -6,8 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.dofi.tb1.R
-import com.dofi.tb1.data.model.Story
+import com.dofi.tb1.data.model.NetworkResultState
 import com.dofi.tb1.databinding.FragmentPostBinding
 import com.dofi.tb1.view.adapter.PostAdapter
 import com.dofi.tb1.view.dialog.CommentDialog
@@ -42,17 +41,26 @@ class PostFragment : Fragment() {
         }
     }
 
-    private fun onObserverListener() {
+    private fun onObserverListener() = with(binding) {
         viewModel.apply {
-            postByUser.observe(viewLifecycleOwner) { response ->
-                response.data?.let {
-                    postAdapter.setData(
-                        listItem = it,
-                        onClickListener = { post, _ ->
-                            viewModel.fetchCommentByPost(post.id.orEmpty())
-                            commentDialog.show(childFragmentManager, "CommentDialog")
+            getPostByUserResponse.observe(viewLifecycleOwner) {
+                when (it) {
+                    is NetworkResultState.Loading -> {
+                        pbPostLoading.visibility = View.VISIBLE
+                    }
+                    is NetworkResultState.Success -> {
+                        pbPostLoading.visibility = View.GONE
+                        it.data?.data?.let { listPost ->
+                            postAdapter.setData(
+                                listItem = listPost,
+                                onClickListener = { post, _ ->
+                                    viewModel.getCommentByPost(post.id.orEmpty(), listOf(50, 0))
+                                    commentDialog.show(childFragmentManager, "CommentDialog")
+                                }
+                            )
                         }
-                    )
+                    }
+                    else -> {}
                 }
             }
         }

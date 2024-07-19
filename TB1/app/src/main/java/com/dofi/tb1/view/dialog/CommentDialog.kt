@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.dofi.tb1.data.model.NetworkResultState
 import com.dofi.tb1.databinding.DialogCommentBinding
 import com.dofi.tb1.view.adapter.CommentAdapter
 import com.dofi.tb1.view.adapter.LikeAdapter
@@ -49,20 +50,28 @@ class CommentDialog : BottomSheetDialogFragment() {
 
     private fun onObserverListener() = with(binding) {
         viewModel.apply {
-            users.observe(viewLifecycleOwner) { response ->
-                response.data?.let { user ->
-                    likeAdapter.setData(user)
+            listOfUsers.observe(viewLifecycleOwner) {
+                when (it) {
+                    is NetworkResultState.Success -> {
+                        likeAdapter.setData(it.data?.data ?: emptyList())
+                    }
+                    else -> {}
                 }
             }
 
-            commentByPost.observe(viewLifecycleOwner) { response ->
-                response.data?.let { comment ->
-                    commentAdapter.setData(comment)
-                    if (comment.isEmpty()) {
-                        llNoComment.visibility = View.VISIBLE
-                    } else {
-                        llNoComment.visibility = View.GONE
+            getCommentByPostResponse.observe(viewLifecycleOwner) {
+                when (it) {
+                    is NetworkResultState.Success -> {
+                        val comment = it.data?.data ?: emptyList()
+                        commentAdapter.setData(comment)
+
+                        if (comment.isEmpty()) {
+                            llNoComment.visibility = View.VISIBLE
+                        } else {
+                            llNoComment.visibility = View.GONE
+                        }
                     }
+                    else -> {}
                 }
             }
         }

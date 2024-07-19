@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import com.dofi.tb1.data.model.Comment
+import com.dofi.tb1.data.model.comment.Comment
 import com.dofi.tb1.databinding.ItemChatBinding
 
 class ChatAdapter : RecyclerView.Adapter<ChatAdapter.ChatViewHolder>() {
